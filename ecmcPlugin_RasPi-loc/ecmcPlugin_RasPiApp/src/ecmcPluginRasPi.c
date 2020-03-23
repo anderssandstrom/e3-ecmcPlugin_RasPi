@@ -20,7 +20,7 @@ extern "C" {
 
 #include <stdio.h>
 #include "ecmcPluginDefs.h"
-#include "ecmcAdvanced.h"
+#include "ecmcRasPiGPIO.h"
 
 /** Optional. 
  *  Will be called once just before ecmc goes into realtime mode.

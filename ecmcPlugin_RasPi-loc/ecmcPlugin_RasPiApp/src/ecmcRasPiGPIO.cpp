@@ -3,7 +3,7 @@
 * ecmc is distributed subject to a Software License Agreement found
 * in file LICENSE that is included with this distribution. 
 *
-*  ecmcAdvanced.cpp
+*  ecmcRasPiGPIO.cpp
 *
 *  Created on: Mar 22, 2020
 *      Author: anderssandstrom
@@ -15,7 +15,7 @@
 #define ECMC_IS_PLUGIN
 
 #include "ecmcPluginDataRefs.h"
-#include "ecmcAdvanced.h"
+#include "ecmcRasPiGPIO.h"
 
 // read rt sample time 
 double getSampleRate(void* ecmcRefs) {
