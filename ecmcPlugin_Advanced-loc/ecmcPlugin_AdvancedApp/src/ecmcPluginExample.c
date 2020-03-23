@@ -10,6 +10,10 @@
 *
 \*************************************************************************/
 
+// Needed to get headers in ecmc right...
+#define ECMC_IS_PLUGIN
+#define ECMC_EXAMPLE_PLUGIN_VERSION 1
+
 #ifdef __cplusplus
 extern "C" {
 #endif  // ifdef __cplusplus
@@ -17,8 +21,6 @@ extern "C" {
 #include <stdio.h>
 #include "ecmcPluginDefs.h"
 #include "ecmcAdvanced.h"
-
-#define ECMC_EXAMPLE_PLUGIN_VERSION 1
 
 /** Optional. 
  *  Will be called once just before ecmc goes into realtime mode.

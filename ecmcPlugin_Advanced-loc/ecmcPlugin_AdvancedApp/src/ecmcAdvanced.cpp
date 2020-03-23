@@ -10,6 +10,10 @@
 *      Credits to  https://github.com/sgreg/dynamic-loading 
 *
 \*************************************************************************/
+
+// Needed to get headers in ecmc right...
+#define ECMC_IS_PLUGIN
+
 #include "ecmcPluginDataRefs.h"
 #include "ecmcAdvanced.h"
 
