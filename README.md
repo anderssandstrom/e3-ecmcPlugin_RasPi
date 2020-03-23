@@ -1,6 +1,23 @@
-e3-ecmcPlugin_Advanced
+e3-ecmcPlugin_RasPi
 ======
-ESS Site-specific EPICS module : ecmcPlugin_Advanced
+ESS Site-specific EPICS module : ecmcPlugin_RasPi
+RasPi GPIO support for ecmc.
+
+# Preparations
+## Uprading wiring pi for RasPi 4B
+```
+$ cd /tmp
+$ wget https://project-downloads.drogon.net/wiringpi-latest.deb
+$ sudo dpkg -i wiringpi-latest.deb
+```
+
+
+
+
+
+
+# Old below.. Keep for later use
+
 
 Example illustrating a plugin for use with ecmc.
 Shows use of callbacks and implementation, custom ecmc plc-functions and how to access the
