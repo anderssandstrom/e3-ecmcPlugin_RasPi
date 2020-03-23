@@ -46,11 +46,11 @@ APPSRC:=$(APP)/src
 
 USR_CFLAGS   += -shared -fPIC -Wall -Wextra
 USR_LDFLAGS  += -lstdc++
-USR_LDFLAGS += -Wl
 USR_INCLUDES += -I$(where_am_I)$(APPSRC)
 
 TEMPLATES += $(wildcard $(APPDB)/*.db)
 SOURCES += $(APPSRC)/ecmcPluginExample.c
+SOURCES += $(APPSRC)/ecmcAdvanced.cpp
 
 db:
 
