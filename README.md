@@ -35,6 +35,7 @@ struct ecmcPluginData {
 ### int  constructFnc(), optional
 This callback is called once when the plugin is loaded into ecmc. This is a good place to put code for any initialization needed in the plugin module.
 If not used then set "ecmcPluginData.constructFnc=NULL".
+
 Return value: 0 for success or error code.
 
 ### void destructFnc(), optional
@@ -46,6 +47,7 @@ This callback is called once in each realtime loop (sync to ecmc). This is a goo
 If not used then set "ecmcPluginData.realtimeFnc=NULL".
 
 Parameters: ecmcErrorId: reflects the current errorstate of ecmc.
+
 Return value: 0 for success or error code.
 
 ### int realtimeEnterFnc(void* ecmcRefs), optional
