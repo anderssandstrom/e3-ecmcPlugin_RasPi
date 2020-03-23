@@ -1,5 +1,4 @@
-
-e3-ecmcPlugin_Simple  
+e3-ecmcPlugin_Advanced
 ======
 ESS Site-specific EPICS module : ecmcPlugin_Advanced
 
@@ -67,6 +66,7 @@ Return value: 0 for success or error code.
 ### int realtimeExitFnc(), optional
 This callback is called once just before ecmc exits realtime mode (exits rt-thread).
 If not used then set "ecmcPluginData.exitRealTimeFnc=NULL".
+
 Return value: 0 for success or error code.
 
 ### Example:
