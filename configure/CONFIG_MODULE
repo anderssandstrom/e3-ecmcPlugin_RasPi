@@ -1,5 +1,5 @@
 #
-EPICS_MODULE_NAME:=ecmcPlugin_Simple
+EPICS_MODULE_NAME:=ecmcPlugin_Advanced
 
 EPICS_MODULE_TAG:=master
 #
@@ -24,7 +24,7 @@ E3_MODULE_VERSION:=master
 #
 
 E3_MODULE_NAME:=$(EPICS_MODULE_NAME)
-E3_MODULE_SRC_PATH:=ecmcPlugin_Simple-loc
+E3_MODULE_SRC_PATH:=ecmcPlugin_Advanced-loc
 E3_MODULE_MAKEFILE:=$(EPICS_MODULE_NAME).Makefile
 
 

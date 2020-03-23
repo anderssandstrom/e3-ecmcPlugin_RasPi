@@ -30,7 +30,7 @@ include $(E3_REQUIRE_TOOLS)/driver.makefile
 include $(E3_REQUIRE_CONFIG)/DECOUPLE_FLAGS
 
 ###
-APP:=ecmcPlugin_SimpleApp
+APP:=ecmcPlugin_AdvancedApp
 APPDB:=$(APP)/Db
 APPSRC:=$(APP)/src
 
