@@ -53,10 +53,13 @@ int exampleRealtime(int ecmcError)
 /** Optional function.
  *  Will be called once just before going to realtime mode
  *  Return value other than 0 will be considered error.
- *  ecmcRefs will be used to pass ecmc objects to lib
+ *  ecmcRefs is only valid between "exampleEnterRT()" and "exampleExitRT()"
  **/
 int exampleEnterRT(void* ecmcRefs){
-  printf("Ecmc sample rate is: %lf ms",GetSampleRate(ecmcRefs));
+  // Determine ecmc sample rate
+  printf("Ecmc sample rate is: %lf ms",getSampleRate(ecmcRefs));
+  // Use ecmcAsynPort
+  useAsynPort(ecmcRefs);
   return 0;
 }
 
