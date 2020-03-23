@@ -10,8 +10,13 @@
 *
 \*************************************************************************/
 
+# ifdef __cplusplus
+extern "C" {
+# endif  // ifdef __cplusplus
+
 #include <stdio.h>
 #include "ecmcPluginDefs.h"
+#include "ecmcPluginDataRefs.h"
 #define ECMC_EXAMPLE_PLUGIN_VERSION 1
 
 /** Optional. 
@@ -50,7 +55,9 @@ int exampleRealtime(int ecmcError)
  *  ecmcRefs will be used to pass ecmc objects to lib
  **/
 int exampleEnterRT(void* ecmcRefs){
-  printf("exampleEnterRT...\n");
+  
+  ecmcPluginDataRefs *dataRefs = (ecmcPluginDataRefs*)ecmcRefs;
+  printf("exampleEnterRT... Realtime sample rate is %lf\n",dataRefs->sampleTimeMS);
   return 0;
 }
 
@@ -138,5 +145,8 @@ struct ecmcPluginData pluginDataDef = {
       .funcs[2] = {0} //last element set all to zero..
 };
 
-// Register plugin data
 ecmc_plugin_register(pluginDataDef);
+
+# ifdef __cplusplus
+}
+# endif  // ifdef __cplusplus
