@@ -45,6 +45,12 @@ USR_CFLAGS   += -shared -fPIC -Wall -Wextra
 USR_LDFLAGS  += -lstdc++
 USR_INCLUDES += -I$(where_am_I)$(APPSRC)
 
+# Tested on raspi 4b runing:
+# Linux raspberrypi 4.19.97-v7l+ #1294 SMP Thu Jan 30 13:21:14 GMT 2020 armv7l GNU/Linux
+
+USR_LDFLAGS += -lwiringPi
+
+
 TEMPLATES += $(wildcard $(APPDB)/*.db)
 SOURCES += $(APPSRC)/ecmcPluginRasPi.c
 SOURCES += $(APPSRC)/ecmcRasPiGPIO.cpp
