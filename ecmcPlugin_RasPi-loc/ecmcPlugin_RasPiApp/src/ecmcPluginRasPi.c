@@ -84,26 +84,43 @@ int rpi_ExitRT(void){
   return 0;
 }
 
-/** rpi_digitalWrite*/
 double rpi_digitalWrite(double pin, double value)
 {
-  //printf("rpi_digitalWrite %lf, %lf.\n",pin,value);
   digitalWrite((int)pin, (int)value);
   return 0;
 }
 
-/** rpi_digitalRead*/
 double rpi_digitalRead(double pin)
 {
-  //printf("rpi_digitalRead %lf.\n",pin);
   return (double)digitalRead ((int)pin);
 }
 
-/** rpi_pinMode*/
 double rpi_pinMode(double pin, double mode)
 {
-  //printf("rpi_pinMode %lf.\n",pin);
   pinMode ((int)pin,(int)mode);
+  return 0;
+}
+
+double rpi_pullUpDnControl(double pin, double pud)
+{
+  pullUpDnControl ((int)pin,(int)pud);
+  return 0;
+}
+
+double rpi_pwmWrite(double pin, double value)
+{
+  pwmWrite ((int)pin,(int)value);
+  return 0;
+}
+
+double rpi_analogRead(double pin)
+{  
+  return (double)analogRead ((int)pin);
+}
+
+double rpi_analogWrite(double pin, double value)
+{
+  analogWrite ((int)pin,(int)value);
   return 0;
 }
 
@@ -145,15 +162,15 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg2 = rpi_digitalWrite, // Func 1 has 2 args
         .funcArg3 = NULL,
         .funcArg4 = NULL,
-        .funcArg6 = NULL,
-        .funcArg6 = NULL
+        .funcArg5 = NULL,                
+        .funcArg6 = NULL,        
       },
   .funcs[1] =
       { /*----rpi_digitalRead----*/
         // Function name (this is the name you use in ecmc plc-code)
         .funcName = "rpi_digitalRead",
         // Function description
-        .funcDesc = "WiringPi: level = digitalRead(pin)",
+        .funcDesc = "WiringPi: level=digitalRead(pin)",
         // Number of arguments in the function prototytpe
         .argCount = 1,
         /**
@@ -166,6 +183,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg2 = NULL,
         .funcArg3 = NULL,
         .funcArg4 = NULL,
+        .funcArg5 = NULL,                
         .funcArg6 = NULL,
       },
   .funcs[2] =
@@ -186,10 +204,95 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg2 = rpi_pinMode,  // 2 Arg
         .funcArg3 = NULL,
         .funcArg4 = NULL,
+        .funcArg5 = NULL,                
         .funcArg6 = NULL,
+      },
+  .funcs[3] =
+      { /*----rpi_pullUpDnControl----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_pullUpDnControl",
+        // Function description
+        .funcDesc = "WiringPi: void pullUpDnControl(pin,pud)",        
+        // Number of arguments in the function prototytpe
+        .argCount = 2,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = NULL,
+        .funcArg1 = NULL,
+        .funcArg2 = rpi_pullUpDnControl,  // 2 Arg
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
+        .funcArg6 = NULL,
+      },
+  .funcs[4] =
+      { /*----rpi_pwmWrite----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_pwmWrite",
+        // Function description
+        .funcDesc = "WiringPi: void pwmWrite(pin,value)",        
+        // Number of arguments in the function prototytpe
+        .argCount = 2,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = NULL,
+        .funcArg1 = NULL,
+        .funcArg2 = rpi_pwmWrite,  // 2 Arg
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
         .funcArg6 = NULL
       },
-  .funcs[3] = {0}, //last element set all to zero..
+  .funcs[5] =
+      { /*----rpi_analogRead----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_analogRead",
+        // Function description
+        .funcDesc = "WiringPi: value=analogRead(pin)",        
+        // Number of arguments in the function prototytpe
+        .argCount = 1,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = NULL,
+        .funcArg1 = rpi_analogRead,  // 1 Arg
+        .funcArg2 = NULL, 
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
+        .funcArg6 = NULL
+      },
+  .funcs[6] =
+      { /*----rpi_analogWrite----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_analogWrite",
+        // Function description
+        .funcDesc = "WiringPi: void analogWrite(pin,value)",
+        // Number of arguments in the function prototytpe
+        .argCount = 2,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = NULL,
+        .funcArg1 = NULL,
+        .funcArg2 = rpi_analogWrite,   // 2 Arg
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
+        .funcArg6 = NULL
+      },
+
+  .funcs[7] = {0}, //last element set all to zero..
 
   /** Plugin specific constants (add prefix to not risc collide with other modules)
    *  Constants from wiringPi
