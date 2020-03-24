@@ -12,7 +12,9 @@ $ sudo dpkg -i wiringpi-latest.deb
 ```
 
 
-
+## Notes
+Uses wiringPI pin numbering
+This is just for fun....
 
 
 
