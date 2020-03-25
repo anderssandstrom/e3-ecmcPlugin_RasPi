@@ -16,6 +16,9 @@ $ sudo dpkg -i wiringpi-latest.deb
 Uses wiringPI pin numbering
 This is just for fun....
 
+SOurces at mirror (original seems down):
+https://github.com/WiringPi/WiringPi
+
 
 
 # Old below.. Keep for later use
