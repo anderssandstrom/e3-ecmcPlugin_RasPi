@@ -128,6 +128,8 @@ double rpi_analogWrite(double pin, double value)
 struct ecmcPluginData pluginDataDef = {
   // Name 
   .name = ECMC_RASPI_PLUGIN_NAME,
+  // Description 
+  .desc = "ecmc plugin for GPIO access on RasPi (wrapper to WiringPi)",
   // Plugin version
   .version = ECMC_RASPI_PLUGIN_VERSION,
   // Allways use ECMC_PLUG_VERSION_MAGIC
