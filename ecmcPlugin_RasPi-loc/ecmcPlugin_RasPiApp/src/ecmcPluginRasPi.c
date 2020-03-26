@@ -236,13 +236,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_digitalWrite",
         // Function description
         .funcDesc = "WiringPi: void digitalWrite(pin,level)",
-        // Number of arguments in the function prototytpe
-        .argCount = 2,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = NULL,
         .funcArg1 = NULL,
         .funcArg2 = rpi_digitalWrite, // Func 1 has 2 args
@@ -257,13 +251,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_digitalRead",
         // Function description
         .funcDesc = "WiringPi: level=digitalRead(pin)",
-        // Number of arguments in the function prototytpe
-        .argCount = 1,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = NULL,
         .funcArg1 = rpi_digitalRead, // 1 Arg
         .funcArg2 = NULL,
@@ -278,13 +266,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_pinMode",
         // Function description
         .funcDesc = "WiringPi: void pinMode(pin,mode)",        
-        // Number of arguments in the function prototytpe
-        .argCount = 2,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = NULL,
         .funcArg1 = NULL,
         .funcArg2 = rpi_pinMode,  // 2 Arg
@@ -299,13 +281,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_pullUpDnControl",
         // Function description
         .funcDesc = "WiringPi: void pullUpDnControl(pin,pud)",        
-        // Number of arguments in the function prototytpe
-        .argCount = 2,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = NULL,
         .funcArg1 = NULL,
         .funcArg2 = rpi_pullUpDnControl,  // 2 Arg
@@ -319,14 +295,8 @@ struct ecmcPluginData pluginDataDef = {
         // Function name (this is the name you use in ecmc plc-code)
         .funcName = "rpi_pwmWrite",
         // Function description
-        .funcDesc = "WiringPi: void pwmWrite(pin,value)",        
-        // Number of arguments in the function prototytpe
-        .argCount = 2,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        .funcDesc = "WiringPi: void pwmWrite(pin,value)",
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = NULL,
         .funcArg1 = NULL,
         .funcArg2 = rpi_pwmWrite,  // 2 Arg
@@ -341,13 +311,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_analogRead",
         // Function description
         .funcDesc = "WiringPi: value=analogRead(pin)",        
-        // Number of arguments in the function prototytpe
-        .argCount = 1,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = NULL,
         .funcArg1 = rpi_analogRead,  // 1 Arg
         .funcArg2 = NULL, 
@@ -362,13 +326,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_analogWrite",
         // Function description
         .funcDesc = "WiringPi: void analogWrite(pin,value)",
-        // Number of arguments in the function prototytpe
-        .argCount = 2,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = NULL,
         .funcArg1 = NULL,
         .funcArg2 = rpi_analogWrite,   // 2 Arg
@@ -383,13 +341,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_digitalWriteByte",
         // Function description
         .funcDesc = "WiringPi: void digitalWriteByte(value)",
-        // Number of arguments in the function prototytpe
-        .argCount = 1,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = NULL,
         .funcArg1 = rpi_digitalWriteByte,
         .funcArg2 = NULL,
@@ -404,13 +356,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_pwmSetMode",
         // Function description
         .funcDesc = "WiringPi: void pwmSetMode(mode)",
-        // Number of arguments in the function prototytpe
-        .argCount = 1,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = NULL,
         .funcArg1 = rpi_pwmSetMode,
         .funcArg2 = NULL,
@@ -426,13 +372,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_pwmSetRange",
         // Function description
         .funcDesc = "WiringPi: void pwmSetRange(range)",
-        // Number of arguments in the function prototytpe
-        .argCount = 1,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = NULL,
         .funcArg1 = rpi_pwmSetRange,
         .funcArg2 = NULL,
@@ -447,13 +387,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_pwmSetClock",
         // Function description
         .funcDesc = "WiringPi: void pwmSetClock(divisor)",
-        // Number of arguments in the function prototytpe
-        .argCount = 1,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = NULL,
         .funcArg1 = rpi_pwmSetClock,
         .funcArg2 = NULL,
@@ -468,13 +402,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_piBoardRev",
         // Function description
         .funcDesc = "WiringPi: int piBoardRev()",
-        // Number of arguments in the function prototytpe
-        .argCount = 0,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = rpi_piBoardRev,
         .funcArg1 = NULL,
         .funcArg2 = NULL,
@@ -489,13 +417,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_wpiPinToGpio",
         // Function description
         .funcDesc = "WiringPi: int wpiPinToGpio(wPiPin)",
-        // Number of arguments in the function prototytpe
-        .argCount = 1,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = NULL,
         .funcArg1 = rpi_wpiPinToGpio,
         .funcArg2 = NULL,
@@ -510,13 +432,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_physPinToGpio",
         // Function description
         .funcDesc = "WiringPi: int physPinToGpio(physPin)",
-        // Number of arguments in the function prototytpe
-        .argCount = 1,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = NULL,
         .funcArg1 = rpi_physPinToGpio,
         .funcArg2 = NULL,
@@ -531,13 +447,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_setPadDrive",
         // Function description
         .funcDesc = "WiringPi: int setPadDrive(group, value)",
-        // Number of arguments in the function prototytpe
-        .argCount = 2,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = NULL,
         .funcArg1 = NULL,
         .funcArg2 = rpi_setPadDrive,
@@ -552,13 +462,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_wiringPiSetup",
         // Function description
         .funcDesc = "WiringPi: int wiringPiSetup()",
-        // Number of arguments in the function prototytpe
-        .argCount = 0,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = rpi_wiringPiSetup,
         .funcArg1 = NULL,
         .funcArg2 = NULL,
@@ -573,13 +477,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_wiringPiSetupGpio",
         // Function description
         .funcDesc = "WiringPi: int wiringPiSetupGpio()",
-        // Number of arguments in the function prototytpe
-        .argCount = 0,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = rpi_wiringPiSetupGpio,
         .funcArg1 = NULL,
         .funcArg2 = NULL,
@@ -594,13 +492,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_wiringPiSetupPhys",
         // Function description
         .funcDesc = "WiringPi: int wiringPiSetupPhys()",
-        // Number of arguments in the function prototytpe
-        .argCount = 0,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = rpi_wiringPiSetupPhys,
         .funcArg1 = NULL,
         .funcArg2 = NULL,
@@ -615,13 +507,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcName = "rpi_wiringPiSetupSys",
         // Function description
         .funcDesc = "WiringPi: int wiringPiSetupSys()",
-        // Number of arguments in the function prototytpe
-        .argCount = 0,
-        /**
-        * 7 different prototypes allowed (only doubles since reg in plc).
-        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
-        **/
+        /* 7 different prototypes allowed (only doubles since reg in plc). */
         .funcArg0 = rpi_wiringPiSetupSys,
         .funcArg1 = NULL,
         .funcArg2 = NULL,
