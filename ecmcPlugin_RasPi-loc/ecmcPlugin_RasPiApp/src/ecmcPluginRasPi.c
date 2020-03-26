@@ -29,6 +29,15 @@ static double ecmcSampleRate = -1;
 static void*  ecmcDataRefs   = 0;  //ecmcRefs form raspiEnterRT()
 static int    lastEcmcError  = 0;
 static void*  ecmcAsynPort   = NULL;
+static int    wiringPiSetupDone = 0;
+
+#define EXE_SETUP_IF_NOT_DONE()              \
+  {                                          \
+    if (!wiringPiSetupDone) {                \
+      wiringPiSetup ();                      \
+      wiringPiSetupDone = 1;                 \
+    }                                        \
+  }                                          \
 
 /** Optional. 
  *  Will be called once just before ecmc goes into realtime mode.
@@ -37,7 +46,7 @@ static void*  ecmcAsynPort   = NULL;
 int rpi_Construct(void)
 {
   printf("Ecmc plugin, "ECMC_RASPI_PLUGIN_NAME", for RasPi GPIO support initiating...\n");
-  wiringPiSetup ();  // Use wiringPi pin numbering
+  printf("Note: Defaults to WiringPi pin numbering if not another setup function is called.\n");
   return 0;
 }
 
@@ -86,44 +95,67 @@ int rpi_ExitRT(void){
 
 /** WiringPi wrapper functions below 
  *
+ *  "Setup functions":
+ */
+double rpi_wiringPiSetup() {
+  wiringPiSetupDone = 1;
+  return (double)wiringPiSetup();
+}
+
+double rpi_wiringPiSetupGpio() {
+  wiringPiSetupDone = 1;
+  return (double)wiringPiSetupGpio();
+}
+
+double rpi_wiringPiSetupPhys() {
+  wiringPiSetupDone = 1;
+  return (double)wiringPiSetupPhys();
+}
+
+double rpi_wiringPiSetupSys() {
+  wiringPiSetupDone = 1;
+  return (double)wiringPiSetupSys();
+}
+
+/**
  *  "Core functions":
  */
-double rpi_digitalWrite(double pin, double value)
-{
+double rpi_digitalWrite(double pin, double value) {
+  EXE_SETUP_IF_NOT_DONE();
   digitalWrite((int)pin, (int)value);
   return 0;
 }
 
-double rpi_digitalRead(double pin)
-{
+double rpi_digitalRead(double pin) {
+  EXE_SETUP_IF_NOT_DONE();
   return (double)digitalRead ((int)pin);
 }
 
-double rpi_pinMode(double pin, double mode)
-{
+double rpi_pinMode(double pin, double mode) {
+  EXE_SETUP_IF_NOT_DONE();
   pinMode ((int)pin,(int)mode);
   return 0;
 }
 
-double rpi_pullUpDnControl(double pin, double pud)
-{
+double rpi_pullUpDnControl(double pin, double pud) {
+  EXE_SETUP_IF_NOT_DONE();
   pullUpDnControl ((int)pin,(int)pud);
   return 0;
 }
 
-double rpi_pwmWrite(double pin, double value)
-{
+double rpi_pwmWrite(double pin, double value) {
+  EXE_SETUP_IF_NOT_DONE();
   pwmWrite ((int)pin,(int)value);
   return 0;
 }
 
-double rpi_analogRead(double pin)
-{  
+double rpi_analogRead(double pin) {
+  EXE_SETUP_IF_NOT_DONE();
   return (double)analogRead ((int)pin);
 }
 
-double rpi_analogWrite(double pin, double value)
-{
+double rpi_analogWrite(double pin, double value) {
+  EXE_SETUP_IF_NOT_DONE();
   analogWrite ((int)pin,(int)value);
   return 0;
 }
@@ -132,38 +164,46 @@ double rpi_analogWrite(double pin, double value)
   "Raspberry Pi Specifics" functions
 */
 double rpi_digitalWriteByte(double value) {
+  EXE_SETUP_IF_NOT_DONE();
   digitalWriteByte((int)value) ;
   return 0;
 }
 
 double rpi_pwmSetMode(double mode) {
+  EXE_SETUP_IF_NOT_DONE();
   pwmSetMode((int)mode);
   return 0;
 }
 
 double rpi_pwmSetRange(double range) {
+  EXE_SETUP_IF_NOT_DONE();
   pwmSetRange((unsigned int)range);
   return 0;
 }
 
 double rpi_pwmSetClock(double divisor) {
+  EXE_SETUP_IF_NOT_DONE();
   pwmSetClock((int)divisor);
   return 0;
 }
 
 double rpi_piBoardRev(void) {
+  EXE_SETUP_IF_NOT_DONE();
   return (double)piBoardRev();
 }
 
 double rpi_wpiPinToGpio(double wPiPin) {
+  EXE_SETUP_IF_NOT_DONE();
   return (double)wpiPinToGpio((int) wPiPin);
 }
 
 double rpi_physPinToGpio(double physPin) {
+  EXE_SETUP_IF_NOT_DONE();
   return (double)physPinToGpio((int) physPin);
 }
 
 double rpi_setPadDrive(double group, double value) {
+  EXE_SETUP_IF_NOT_DONE();
   setPadDrive((int)group, (int)value);
   return 0;
 }
@@ -506,7 +546,91 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg5 = NULL,
         .funcArg6 = NULL
       },
-  .funcs[15] = {0}, //last element set all to zero..
+  .funcs[15] =
+      { /*----rpi_wiringPiSetup----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_wiringPiSetup",
+        // Function description
+        .funcDesc = "WiringPi: int wiringPiSetup()",
+        // Number of arguments in the function prototytpe
+        .argCount = 0,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = rpi_wiringPiSetup,
+        .funcArg1 = NULL,
+        .funcArg2 = NULL,
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
+        .funcArg6 = NULL
+      },
+  .funcs[16] =
+      { /*----rpi_wiringPiSetupGpio----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_wiringPiSetupGpio",
+        // Function description
+        .funcDesc = "WiringPi: int wiringPiSetupGpio()",
+        // Number of arguments in the function prototytpe
+        .argCount = 0,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = rpi_wiringPiSetupGpio,
+        .funcArg1 = NULL,
+        .funcArg2 = NULL,
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
+        .funcArg6 = NULL
+      },
+  .funcs[17] =
+      { /*----rpi_wiringPiSetupPhys----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_wiringPiSetupPhys",
+        // Function description
+        .funcDesc = "WiringPi: int wiringPiSetupPhys()",
+        // Number of arguments in the function prototytpe
+        .argCount = 0,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = rpi_wiringPiSetupPhys,
+        .funcArg1 = NULL,
+        .funcArg2 = NULL,
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
+        .funcArg6 = NULL
+      },
+  .funcs[18] =
+      { /*----rpi_wiringPiSetupSys----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_wiringPiSetupSys",
+        // Function description
+        .funcDesc = "WiringPi: int wiringPiSetupSys()",
+        // Number of arguments in the function prototytpe
+        .argCount = 0,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = rpi_wiringPiSetupSys,
+        .funcArg1 = NULL,
+        .funcArg2 = NULL,
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
+        .funcArg6 = NULL
+      },
+  .funcs[19] = {0}, //last element set all to zero..
 
   /** Plugin specific constants (add prefix to not risc collide with other modules)
    *  Constants from wiringPi
