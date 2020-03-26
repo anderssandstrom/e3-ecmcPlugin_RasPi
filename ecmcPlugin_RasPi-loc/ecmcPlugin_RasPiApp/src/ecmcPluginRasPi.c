@@ -84,6 +84,10 @@ int rpi_ExitRT(void){
   return 0;
 }
 
+/** WiringPi wrapper functions below 
+ *
+ *  "Core functions":
+ */
 double rpi_digitalWrite(double pin, double value)
 {
   digitalWrite((int)pin, (int)value);
@@ -121,6 +125,46 @@ double rpi_analogRead(double pin)
 double rpi_analogWrite(double pin, double value)
 {
   analogWrite ((int)pin,(int)value);
+  return 0;
+}
+
+/**
+  "Raspberry Pi Specifics" functions
+*/
+double rpi_digitalWriteByte(double value) {
+  digitalWriteByte((int)value) ;
+  return 0;
+}
+
+double rpi_pwmSetMode(double mode) {
+  pwmSetMode((int)mode);
+  return 0;
+}
+
+double rpi_pwmSetRange(double range) {
+  pwmSetRange((unsigned int)range);
+  return 0;
+}
+
+double rpi_pwmSetClock(double divisor) {
+  pwmSetClock((int)divisor);
+  return 0;
+}
+
+double rpi_piBoardRev(void) {
+  return (double)piBoardRev();
+}
+
+double rpi_wpiPinToGpio(double wPiPin) {
+  return (double)wpiPinToGpio((int) wPiPin);
+}
+
+double rpi_physPinToGpio(double physPin) {
+  return (double)physPinToGpio((int) physPin);
+}
+
+double rpi_setPadDrive(double group, double value) {
+  setPadDrive((int)group, (int)value);
   return 0;
 }
 
@@ -293,8 +337,176 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg5 = NULL,
         .funcArg6 = NULL
       },
+  .funcs[7] =
+      { /*----rpi_digitalWriteByte----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_digitalWriteByte",
+        // Function description
+        .funcDesc = "WiringPi: void digitalWriteByte(value)",
+        // Number of arguments in the function prototytpe
+        .argCount = 1,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = NULL,
+        .funcArg1 = rpi_digitalWriteByte,
+        .funcArg2 = NULL,
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
+        .funcArg6 = NULL
+      },
+  .funcs[8] =
+      { /*----rpi_pwmSetMode----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_pwmSetMode",
+        // Function description
+        .funcDesc = "WiringPi: void pwmSetMode(mode)",
+        // Number of arguments in the function prototytpe
+        .argCount = 1,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = NULL,
+        .funcArg1 = rpi_pwmSetMode,
+        .funcArg2 = NULL,
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
+        .funcArg6 = NULL
+      },
 
-  .funcs[7] = {0}, //last element set all to zero..
+  .funcs[9] =
+      { /*----rpi_pwmSetRange----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_pwmSetRange",
+        // Function description
+        .funcDesc = "WiringPi: void pwmSetRange(range)",
+        // Number of arguments in the function prototytpe
+        .argCount = 1,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = NULL,
+        .funcArg1 = rpi_pwmSetRange,
+        .funcArg2 = NULL,
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
+        .funcArg6 = NULL
+      },
+  .funcs[10] =
+      { /*----rpi_pwmSetClock----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_pwmSetClock",
+        // Function description
+        .funcDesc = "WiringPi: void pwmSetClock(divisor)",
+        // Number of arguments in the function prototytpe
+        .argCount = 1,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = NULL,
+        .funcArg1 = rpi_pwmSetClock,
+        .funcArg2 = NULL,
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
+        .funcArg6 = NULL
+      },
+  .funcs[11] =
+      { /*----rpi_piBoardRev----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_piBoardRev",
+        // Function description
+        .funcDesc = "WiringPi: int piBoardRev()",
+        // Number of arguments in the function prototytpe
+        .argCount = 0,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = rpi_piBoardRev,
+        .funcArg1 = NULL,
+        .funcArg2 = NULL,
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
+        .funcArg6 = NULL
+      },
+  .funcs[12] =
+      { /*----rpi_wpiPinToGpio----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_wpiPinToGpio",
+        // Function description
+        .funcDesc = "WiringPi: int wpiPinToGpio(wPiPin)",
+        // Number of arguments in the function prototytpe
+        .argCount = 1,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = NULL,
+        .funcArg1 = rpi_wpiPinToGpio,
+        .funcArg2 = NULL,
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
+        .funcArg6 = NULL
+      },
+  .funcs[13] =
+      { /*----rpi_physPinToGpio----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_physPinToGpio",
+        // Function description
+        .funcDesc = "WiringPi: int physPinToGpio(physPin)",
+        // Number of arguments in the function prototytpe
+        .argCount = 1,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = NULL,
+        .funcArg1 = rpi_physPinToGpio,
+        .funcArg2 = NULL,
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
+        .funcArg6 = NULL
+      },
+  .funcs[14] =
+      { /*----rpi_setPadDrive----*/
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "rpi_setPadDrive",
+        // Function description
+        .funcDesc = "WiringPi: int setPadDrive(group, value)",
+        // Number of arguments in the function prototytpe
+        .argCount = 2,
+        /**
+        * 7 different prototypes allowed (only doubles since reg in plc).
+        * Only funcArg${argCount} func shall be assigned the rest set to NULL.
+        * funcArg${argCount}. These need to match. 
+        **/
+        .funcArg0 = NULL,
+        .funcArg1 = NULL,
+        .funcArg2 = rpi_setPadDrive,
+        .funcArg3 = NULL,
+        .funcArg4 = NULL,
+        .funcArg5 = NULL,
+        .funcArg6 = NULL
+      },
+  .funcs[15] = {0}, //last element set all to zero..
 
   /** Plugin specific constants (add prefix to not risc collide with other modules)
    *  Constants from wiringPi
