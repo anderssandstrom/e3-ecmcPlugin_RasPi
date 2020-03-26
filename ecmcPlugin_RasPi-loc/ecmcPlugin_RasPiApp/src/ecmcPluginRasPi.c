@@ -3,7 +3,7 @@
 * ecmc is distributed subject to a Software License Agreement found
 * in file LICENSE that is included with this distribution. 
 *
-*  ecmcPluginExample.cpp
+*  ecmcPluginRasPi.c
 *
 *  Created on: Mar 21, 2020
 *      Author: anderssandstrom
