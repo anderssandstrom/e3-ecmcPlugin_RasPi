@@ -21,6 +21,163 @@ https://github.com/WiringPi/WiringPi
 
 
 
+
+## ecmc plugin info output
+ecmcConfigOrDie "Cfg.LoadPlugin(/epics/base-7.0.3.1/require/3.1.2/siteMods/ecmcPlugin_RasPi/master/lib/linux-arm/libecmcPlugin_RasPi.so)"
+Ecmc plugin, ecmcRasPi, for RasPi GPIO support initiating...
+Plugin info: 
+  Name                 = ecmcRasPi
+  Description          = ecmc plugin for GPIO access on RasPi (wrapper to WiringPi)
+  Version              = 1
+  Interface version    = 512 (ecmc = 512)
+      max plc funcs    = 64
+      max plc consts   = 64
+  Construct func       = @0xb5bf7fc4
+  Enter realtime func  = @0xb5bf7fe4
+  Exit realtime func   = @0xb5bf7fa8
+  Realtime func        = @0xb5bf7f90
+  Destruct func        = @0xb5bf7f98
+  dlhandle             = @0x1de7038
+  Plc functions:
+    funcs[00]:
+      Name       = "rpi_digitalWrite(arg0, arg1);"
+      Desc       = WiringPi: void digitalWrite(pin,level)
+      Arg count  = 2
+      func       = @0xb5bf8014
+    funcs[01]:
+      Name       = "rpi_digitalRead(arg0);"
+      Desc       = WiringPi: level=digitalRead(pin)
+      Arg count  = 1
+      func       = @0xb5bf8040
+    funcs[02]:
+      Name       = "rpi_pinMode(arg0, arg1);"
+      Desc       = WiringPi: void pinMode(pin,mode)
+      Arg count  = 2
+      func       = @0xb5bf805c
+    funcs[03]:
+      Name       = "rpi_pullUpDnControl(arg0, arg1);"
+      Desc       = WiringPi: void pullUpDnControl(pin,pud)
+      Arg count  = 2
+      func       = @0xb5bf8088
+    funcs[04]:
+      Name       = "rpi_pwmWrite(arg0, arg1);"
+      Desc       = WiringPi: void pwmWrite(pin,value)
+      Arg count  = 2
+      func       = @0xb5bf80b0
+    funcs[05]:
+      Name       = "rpi_analogRead(arg0);"
+      Desc       = WiringPi: value=analogRead(pin)
+      Arg count  = 1
+      func       = @0xb5bf80d8
+    funcs[06]:
+      Name       = "rpi_analogWrite(arg0, arg1);"
+      Desc       = WiringPi: void analogWrite(pin,value)
+      Arg count  = 2
+      func       = @0xb5bf80f4
+    funcs[07]:
+      Name       = "rpi_digitalWriteByte(arg0);"
+      Desc       = WiringPi: void digitalWriteByte(value)
+      Arg count  = 1
+      func       = @0xb5bf8120
+    funcs[08]:
+      Name       = "rpi_pwmSetMode(arg0);"
+      Desc       = WiringPi: void pwmSetMode(mode)
+      Arg count  = 1
+      func       = @0xb5bf8140
+    funcs[09]:
+      Name       = "rpi_pwmSetRange(arg0);"
+      Desc       = WiringPi: void pwmSetRange(range)
+      Arg count  = 1
+      func       = @0xb5bf8160
+    funcs[10]:
+      Name       = "rpi_pwmSetClock(arg0);"
+      Desc       = WiringPi: void pwmSetClock(divisor)
+      Arg count  = 1
+      func       = @0xb5bf8180
+    funcs[11]:
+      Name       = "rpi_piBoardRev();"
+      Desc       = WiringPi: int piBoardRev()
+      Arg count  = 0
+      func       = @0xb5bf81a0
+    funcs[12]:
+      Name       = "rpi_wpiPinToGpio(arg0);"
+      Desc       = WiringPi: int wpiPinToGpio(wPiPin)
+      Arg count  = 1
+      func       = @0xb5bf81b4
+    funcs[13]:
+      Name       = "rpi_physPinToGpio(arg0);"
+      Desc       = WiringPi: int physPinToGpio(physPin)
+      Arg count  = 1
+      func       = @0xb5bf81d0
+    funcs[14]:
+      Name       = "rpi_setPadDrive(arg0, arg1);"
+      Desc       = WiringPi: int setPadDrive(group, value)
+      Arg count  = 2
+      func       = @0xb5bf81ec
+  Plc constants:
+    consts[00]:
+      Name     = "rpi_LOW" = 0.000
+      Desc     = WiringPi: Signal level LOW (=0)
+    consts[01]:
+      Name     = "rpi_HIGH" = 1.000
+      Desc     = WiringPi: Signal level HIGH (=1)
+    consts[02]:
+      Name     = "rpi_INPUT" = 0.000
+      Desc     = WiringPi: Pin mode INPUT (=0)
+    consts[03]:
+      Name     = "rpi_OUTPUT" = 1.000
+      Desc     = WiringPi: Pin mode OUTPUT (=1)
+    consts[04]:
+      Name     = "rpi_PWM_OUTPUT" = 2.000
+      Desc     = WiringPi: Pin mode PWM_OUTPUT (=2)
+    consts[05]:
+      Name     = "rpi_GPIO_CLOCK" = 3.000
+      Desc     = WiringPi: Pin mode GPIO_CLOCK (=3)
+    consts[06]:
+      Name     = "rpi_SOFT_PWM_OUTPUT" = 4.000
+      Desc     = WiringPi: Pin mode SOFT_PWM_OUTPUT (=4)
+    consts[07]:
+      Name     = "rpi_SOFT_TONE_OUTPUT" = 5.000
+      Desc     = WiringPi: Pin mode SOFT_TONE_OUTPUT (=5)
+    consts[08]:
+      Name     = "rpi_PWM_TONE_OUTPUT" = 6.000
+      Desc     = WiringPi: Pin mode PWM_TONE_OUTPUT (=6)
+    consts[09]:
+      Name     = "rpi_PUD_OFF" = 0.000
+      Desc     = WiringPi: Pull up/down resistor mode, PUD_OFF (=0)
+    consts[10]:
+      Name     = "rpi_PUD_DOWN" = 1.000
+      Desc     = WiringPi: Pull up/down resistor mode, PUD_DOWN (=1)
+    consts[11]:
+      Name     = "rpi_PUD_UP" = 2.000
+      Desc     = WiringPi: Pull up/down resistor mode, PUD_UP (=2)
+    consts[12]:
+      Name     = "rpi_PWM_MODE_MS" = 0.000
+      Desc     = WiringPi: PWM mode PWM_MODE_MS (=0)
+    consts[13]:
+      Name     = "rpi_PWM_MODE_BAL" = 1.000
+      Desc     = WiringPi: PWM mode PWM_MODE_BAL (=1)
+    consts[14]:
+      Name     = "rpi_WPI_MODE_PINS" = 0.000
+      Desc     = WiringPi: Mode WPI_MODE_PINS (=0)
+    consts[15]:
+      Name     = "rpi_WPI_MODE_GPIO" = 1.000
+      Desc     = WiringPi: Mode WPI_MODE_GPIO (=1)
+    consts[16]:
+      Name     = "rpi_WPI_MODE_GPIO_SYS" = 2.000
+      Desc     = WiringPi: Mode WPI_MODE_GPIO_SYS (=2)
+    consts[17]:
+      Name     = "rpi_WPI_MODE_PHYS" = 3.000
+      Desc     = WiringPi: Mode WPI_MODE_PHYS (=3)
+    consts[18]:
+      Name     = "rpi_WPI_MODE_PIFACE" = 4.000
+      Desc     = WiringPi: Mode WPI_MODE_PIFACE (=4)
+
+
+
+
+
+
 # Old below.. Keep for later use
 
 
