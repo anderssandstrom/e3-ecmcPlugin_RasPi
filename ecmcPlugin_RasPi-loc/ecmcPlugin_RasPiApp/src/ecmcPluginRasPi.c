@@ -26,7 +26,7 @@ extern "C" {
 #include "ecmcRasPiGPIO.h"
 
 static double ecmcSampleRate    = -1;
-static void*  ecmcDataRefs      = 0;    S//ecmcRefs form raspiEnterRT()
+static void*  ecmcDataRefs      = 0;    //ecmcRefs form raspiEnterRT()
 static int    ecmcLastError     = 0;
 static void*  ecmcAsynPort      = NULL;
 static char*  confStr           = NULL;
