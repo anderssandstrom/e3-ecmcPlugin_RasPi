@@ -12,23 +12,24 @@
 
 // Needed to get headers in ecmc right...
 #define ECMC_IS_PLUGIN
-#define ECMC_RASPI_PLUGIN_VERSION 1
-#define ECMC_RASPI_PLUGIN_NAME "ecmcRasPi"
-#define ECMC_RASPI_PLUGIN_PLC_FUNC_PREFIX "rpi_"
+#define ECMC_PLUGIN_VERSION 1
+#define ECMC_PLUGIN_NAME "ecmcRasPi"
+#define ECMC_PLUGIN_DBG_OPTION_CMD "DBG_PRINT"
 
 #ifdef __cplusplus
 extern "C" {
 #endif  // ifdef __cplusplus
 
 #include <stdio.h>
+#include <wiringPi.h>
 #include "ecmcPluginDefs.h"
 #include "ecmcRasPiGPIO.h"
-#include <wiringPi.h>
 
-static double ecmcSampleRate = -1;
-static void*  ecmcDataRefs   = 0;  //ecmcRefs form raspiEnterRT()
-static int    lastEcmcError  = 0;
-static void*  ecmcAsynPort   = NULL;
+static double ecmcSampleRate    = -1;
+static void*  ecmcDataRefs      = 0;    S//ecmcRefs form raspiEnterRT()
+static int    ecmcLastError     = 0;
+static void*  ecmcAsynPort      = NULL;
+static char*  confStr           = NULL;
 static int    wiringPiSetupDone = 0;
 
 #define EXE_SETUP_IF_NOT_DONE()              \
@@ -39,14 +40,31 @@ static int    wiringPiSetupDone = 0;
     }                                        \
   }                                          \
 
+#define PRINT_IF_DBG_MODE(fmt, ...)          \
+  {                                          \
+    if(dbgModeOption){                       \
+      printf(fmt, ## __VA_ARGS__);           \
+    }                                        \
+  }                                          \
+
 /** Optional. 
  *  Will be called once just before ecmc goes into realtime mode.
  *  Return value other than 0 will be considered error.
+ *  configStr can be used for configuration parameters.
  **/
-int rpi_Construct(void)
+int rpi_Construct(char * configStr)
 {
-  printf("Ecmc plugin, "ECMC_RASPI_PLUGIN_NAME", for RasPi GPIO support initiating...\n");
-  printf("Note: Defaults to WiringPi pin numbering if not another setup function is called.\n");
+  confStr = strdup(configStr);
+  //Only one option defined "DBG_PRINT=" (no need for loop)
+  int tempValue=0;
+  int nvals = sscanf(confStr, ECMC_PLUGIN_DBG_OPTION_CMD"=%d",&tempValue);
+  if (nvals == 1) {
+    dbgModeOption = tempValue;
+  }
+  PRINT_IF_DBG_MODE("%s/%s:%d: ConfigStr=\"%s\"\n",__FILE__, __FUNCTION__, __LINE__,configStr);  
+  PRINT_IF_DBG_MODE("Ecmc plugin, "ECMC_PLUGIN_NAME", for RasPi GPIO support loading...\n");
+  PRINT_IF_DBG_MODE("Note: Defaults to WiringPi pin numbering if not another setup function is called.\n");
+
   return 0;
 }
 
@@ -55,7 +73,8 @@ int rpi_Construct(void)
  **/
 void rpi_Destruct(void)
 {
-  printf("Plugin "ECMC_RASPI_PLUGIN_NAME" unloading...\n");
+  PRINT_IF_DBG_MODE("%s/%s:%d: "ECMC_PLUGIN_NAME" unloading...\n",__FILE__, __FUNCTION__, __LINE__);
+  free(confStr);
 }
 
 /** Optional function.
@@ -66,7 +85,8 @@ void rpi_Destruct(void)
  **/
 int rpi_Realtime(int ecmcError)
 {
-  lastEcmcError = ecmcError;
+  PRINT_IF_DBG_MODE("%s/%s:%d: ecmcError = %d\n",__FILE__, __FUNCTION__, __LINE__,ecmcError);
+  ecmcLastError = ecmcError;
   return 0;
 }
 
@@ -75,21 +95,21 @@ int rpi_Realtime(int ecmcError)
  *  Return value other than 0 will be considered error.
  *  ecmcRefs is only valid after "raspiEnterRT()"
  **/
-int rpi_EnterRT(void* ecmcRefs){  
+int rpi_EnterRT(void* ecmcRefs){
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   // Save ecmcRefs if needed
-  printf("Plugin "ECMC_RASPI_PLUGIN_NAME" enters realtime...\n");
   ecmcDataRefs   = ecmcRefs;
   ecmcSampleRate = getSampleRate(ecmcRefs);
   ecmcAsynPort   = getAsynPort(ecmcRefs);    
   return 0;
 }
 
-/** Optional function.,ECMC_RASPI_PLUGIN_NAME
+/** Optional function.
  *  Will be called once just before leaving realtime mode
  *  Return value other than 0 will be considered error.
  **/
 int rpi_ExitRT(void){
-  printf("Plugin "ECMC_RASPI_PLUGIN_NAME" exits realtime...\n");
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   return 0;
 }
 
@@ -98,21 +118,25 @@ int rpi_ExitRT(void){
  *  "Setup functions":
  */
 double rpi_wiringPiSetup() {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   wiringPiSetupDone = 1;
   return (double)wiringPiSetup();
 }
 
 double rpi_wiringPiSetupGpio() {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   wiringPiSetupDone = 1;
   return (double)wiringPiSetupGpio();
 }
 
 double rpi_wiringPiSetupPhys() {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   wiringPiSetupDone = 1;
   return (double)wiringPiSetupPhys();
 }
 
 double rpi_wiringPiSetupSys() {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   wiringPiSetupDone = 1;
   return (double)wiringPiSetupSys();
 }
@@ -121,40 +145,47 @@ double rpi_wiringPiSetupSys() {
  *  "Core functions":
  */
 double rpi_digitalWrite(double pin, double value) {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   EXE_SETUP_IF_NOT_DONE();
   digitalWrite((int)pin, (int)value);
   return 0;
 }
 
 double rpi_digitalRead(double pin) {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   EXE_SETUP_IF_NOT_DONE();
   return (double)digitalRead ((int)pin);
 }
 
 double rpi_pinMode(double pin, double mode) {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   EXE_SETUP_IF_NOT_DONE();
   pinMode ((int)pin,(int)mode);
   return 0;
 }
 
 double rpi_pullUpDnControl(double pin, double pud) {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   EXE_SETUP_IF_NOT_DONE();
   pullUpDnControl ((int)pin,(int)pud);
   return 0;
 }
 
 double rpi_pwmWrite(double pin, double value) {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   EXE_SETUP_IF_NOT_DONE();
   pwmWrite ((int)pin,(int)value);
   return 0;
 }
 
 double rpi_analogRead(double pin) {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   EXE_SETUP_IF_NOT_DONE();
   return (double)analogRead ((int)pin);
 }
 
 double rpi_analogWrite(double pin, double value) {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   EXE_SETUP_IF_NOT_DONE();
   analogWrite ((int)pin,(int)value);
   return 0;
@@ -164,45 +195,53 @@ double rpi_analogWrite(double pin, double value) {
   "Raspberry Pi Specifics" functions
 */
 double rpi_digitalWriteByte(double value) {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   EXE_SETUP_IF_NOT_DONE();
   digitalWriteByte((int)value) ;
   return 0;
 }
 
 double rpi_pwmSetMode(double mode) {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   EXE_SETUP_IF_NOT_DONE();
   pwmSetMode((int)mode);
   return 0;
 }
 
 double rpi_pwmSetRange(double range) {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   EXE_SETUP_IF_NOT_DONE();
   pwmSetRange((unsigned int)range);
   return 0;
 }
 
 double rpi_pwmSetClock(double divisor) {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   EXE_SETUP_IF_NOT_DONE();
   pwmSetClock((int)divisor);
   return 0;
 }
 
 double rpi_piBoardRev(void) {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   EXE_SETUP_IF_NOT_DONE();
   return (double)piBoardRev();
 }
 
 double rpi_wpiPinToGpio(double wPiPin) {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   EXE_SETUP_IF_NOT_DONE();
   return (double)wpiPinToGpio((int) wPiPin);
 }
 
 double rpi_physPinToGpio(double physPin) {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   EXE_SETUP_IF_NOT_DONE();
   return (double)physPinToGpio((int) physPin);
 }
 
 double rpi_setPadDrive(double group, double value) {
+  PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
   EXE_SETUP_IF_NOT_DONE();
   setPadDrive((int)group, (int)value);
   return 0;
@@ -211,11 +250,13 @@ double rpi_setPadDrive(double group, double value) {
 // Compile data for lib so ecmc now what to use
 struct ecmcPluginData pluginDataDef = {
   // Name 
-  .name = ECMC_RASPI_PLUGIN_NAME,
+  .name = ECMC_PLUGIN_NAME,
   // Description 
   .desc = "ecmc plugin for GPIO access on RasPi (wrapper to WiringPi)",
+    // Option description
+  .optionDesc = ECMC_PLUGIN_DBG_OPTION_CMD"=1/0 : Enables/disables printouts from plugin.",
   // Plugin version
-  .version = ECMC_RASPI_PLUGIN_VERSION,
+  .version = ECMC_PLUGIN_VERSION,
   // Allways use ECMC_PLUG_VERSION_MAGIC
   .ifVersion = ECMC_PLUG_VERSION_MAGIC, 
   // Optional construct func, called once at load. NULL if not definded.
@@ -237,13 +278,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: void digitalWrite(pin,level)",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = NULL,
-        .funcArg1 = NULL,
-        .funcArg2 = rpi_digitalWrite, // Func 1 has 2 args
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,                
-        .funcArg6 = NULL,        
+        .funcArg0  = NULL,
+        .funcArg1  = NULL,
+        .funcArg2  = rpi_digitalWrite, // Func 1 has 2 args
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,                
+        .funcArg6  = NULL, 
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[1] =
       { /*----rpi_digitalRead----*/
@@ -252,13 +297,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: level=digitalRead(pin)",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = NULL,
-        .funcArg1 = rpi_digitalRead, // 1 Arg
-        .funcArg2 = NULL,
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,                
-        .funcArg6 = NULL,
+        .funcArg0  = NULL,
+        .funcArg1  = rpi_digitalRead, // 1 Arg
+        .funcArg2  = NULL,
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,                
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[2] =
       { /*----rpi_pinMode----*/
@@ -267,13 +316,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: void pinMode(pin,mode)",        
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = NULL,
-        .funcArg1 = NULL,
-        .funcArg2 = rpi_pinMode,  // 2 Arg
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,                
-        .funcArg6 = NULL,
+        .funcArg0  = NULL,
+        .funcArg1  = NULL,
+        .funcArg2  = rpi_pinMode,  // 2 Arg
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,                
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[3] =
       { /*----rpi_pullUpDnControl----*/
@@ -282,13 +335,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: void pullUpDnControl(pin,pud)",        
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = NULL,
-        .funcArg1 = NULL,
-        .funcArg2 = rpi_pullUpDnControl,  // 2 Arg
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL,
+        .funcArg0  = NULL,
+        .funcArg1  = NULL,
+        .funcArg2  = rpi_pullUpDnControl,  // 2 Arg
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[4] =
       { /*----rpi_pwmWrite----*/
@@ -297,13 +354,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: void pwmWrite(pin,value)",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = NULL,
-        .funcArg1 = NULL,
-        .funcArg2 = rpi_pwmWrite,  // 2 Arg
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg0  = NULL,
+        .funcArg1  = NULL,
+        .funcArg2  = rpi_pwmWrite,  // 2 Arg
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[5] =
       { /*----rpi_analogRead----*/
@@ -312,13 +373,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: value=analogRead(pin)",        
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = NULL,
-        .funcArg1 = rpi_analogRead,  // 1 Arg
-        .funcArg2 = NULL, 
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg0  = NULL,
+        .funcArg1  = rpi_analogRead,  // 1 Arg
+        .funcArg2  = NULL, 
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[6] =
       { /*----rpi_analogWrite----*/
@@ -327,13 +392,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: void analogWrite(pin,value)",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = NULL,
-        .funcArg1 = NULL,
-        .funcArg2 = rpi_analogWrite,   // 2 Arg
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg0  = NULL,
+        .funcArg1  = NULL,
+        .funcArg2  = rpi_analogWrite,   // 2 Arg
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[7] =
       { /*----rpi_digitalWriteByte----*/
@@ -342,13 +411,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: void digitalWriteByte(value)",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = NULL,
-        .funcArg1 = rpi_digitalWriteByte,
-        .funcArg2 = NULL,
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg0  = NULL,
+        .funcArg1  = rpi_digitalWriteByte,
+        .funcArg2  = NULL,
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[8] =
       { /*----rpi_pwmSetMode----*/
@@ -357,13 +430,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: void pwmSetMode(mode)",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = NULL,
-        .funcArg1 = rpi_pwmSetMode,
-        .funcArg2 = NULL,
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg0  = NULL,
+        .funcArg1  = rpi_pwmSetMode,
+        .funcArg2  = NULL,
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
 
   .funcs[9] =
@@ -373,13 +450,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: void pwmSetRange(range)",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = NULL,
-        .funcArg1 = rpi_pwmSetRange,
-        .funcArg2 = NULL,
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg0  = NULL,
+        .funcArg1  = rpi_pwmSetRange,
+        .funcArg2  = NULL,
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[10] =
       { /*----rpi_pwmSetClock----*/
@@ -388,13 +469,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: void pwmSetClock(divisor)",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = NULL,
-        .funcArg1 = rpi_pwmSetClock,
-        .funcArg2 = NULL,
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg0  = NULL,
+        .funcArg1  = rpi_pwmSetClock,
+        .funcArg2  = NULL,
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[11] =
       { /*----rpi_piBoardRev----*/
@@ -403,13 +488,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: int piBoardRev()",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = rpi_piBoardRev,
-        .funcArg1 = NULL,
-        .funcArg2 = NULL,
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg0  = rpi_piBoardRev,
+        .funcArg1  = NULL,
+        .funcArg2  = NULL,
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[12] =
       { /*----rpi_wpiPinToGpio----*/
@@ -418,13 +507,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: int wpiPinToGpio(wPiPin)",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = NULL,
-        .funcArg1 = rpi_wpiPinToGpio,
-        .funcArg2 = NULL,
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg0  = NULL,
+        .funcArg1  = rpi_wpiPinToGpio,
+        .funcArg2  = NULL,
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[13] =
       { /*----rpi_physPinToGpio----*/
@@ -433,13 +526,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: int physPinToGpio(physPin)",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = NULL,
-        .funcArg1 = rpi_physPinToGpio,
-        .funcArg2 = NULL,
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg0  = NULL,
+        .funcArg1  = rpi_physPinToGpio,
+        .funcArg2  = NULL,
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[14] =
       { /*----rpi_setPadDrive----*/
@@ -448,13 +545,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: int setPadDrive(group, value)",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = NULL,
-        .funcArg1 = NULL,
-        .funcArg2 = rpi_setPadDrive,
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg0  = NULL,
+        .funcArg1  = NULL,
+        .funcArg2  = rpi_setPadDrive,
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[15] =
       { /*----rpi_wiringPiSetup----*/
@@ -463,13 +564,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: int wiringPiSetup()",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = rpi_wiringPiSetup,
-        .funcArg1 = NULL,
-        .funcArg2 = NULL,
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg0  = rpi_wiringPiSetup,
+        .funcArg1  = NULL,
+        .funcArg2  = NULL,
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[16] =
       { /*----rpi_wiringPiSetupGpio----*/
@@ -478,13 +583,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: int wiringPiSetupGpio()",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = rpi_wiringPiSetupGpio,
-        .funcArg1 = NULL,
-        .funcArg2 = NULL,
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg0  = rpi_wiringPiSetupGpio,
+        .funcArg1  = NULL,
+        .funcArg2  = NULL,
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[17] =
       { /*----rpi_wiringPiSetupPhys----*/
@@ -493,13 +602,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: int wiringPiSetupPhys()",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = rpi_wiringPiSetupPhys,
-        .funcArg1 = NULL,
-        .funcArg2 = NULL,
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg0  = rpi_wiringPiSetupPhys,
+        .funcArg1  = NULL,
+        .funcArg2  = NULL,
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[18] =
       { /*----rpi_wiringPiSetupSys----*/
@@ -508,13 +621,17 @@ struct ecmcPluginData pluginDataDef = {
         // Function description
         .funcDesc = "WiringPi: int wiringPiSetupSys()",
         /* 7 different prototypes allowed (only doubles since reg in plc). */
-        .funcArg0 = rpi_wiringPiSetupSys,
-        .funcArg1 = NULL,
-        .funcArg2 = NULL,
-        .funcArg3 = NULL,
-        .funcArg4 = NULL,
-        .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg0  = rpi_wiringPiSetupSys,
+        .funcArg1  = NULL,
+        .funcArg2  = NULL,
+        .funcArg3  = NULL,
+        .funcArg4  = NULL,
+        .funcArg5  = NULL,
+        .funcArg6  = NULL,
+        .funcArg7  = NULL,
+        .funcArg8  = NULL,
+        .funcArg9  = NULL,
+        .funcArg10 = NULL,
       },
   .funcs[19] = {0}, //last element set all to zero..
 
