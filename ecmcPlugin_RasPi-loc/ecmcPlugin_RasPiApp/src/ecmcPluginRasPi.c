@@ -104,7 +104,7 @@ int rpi_EnterRT(void* ecmcRefs){
   return 0;
 }
 
-/** Optional function.,ECMC_PLUGIN_NAME
+/** Optional function.
  *  Will be called once just before leaving realtime mode
  *  Return value other than 0 will be considered error.
  **/
