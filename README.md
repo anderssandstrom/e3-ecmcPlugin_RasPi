@@ -139,118 +139,133 @@ Not sure how to handle this. Since wiringPi is installed in the raspian dist I g
 
 ## ecmc plugin info output (for ecmcPlugin_RasPi)
 ```
-ecmcConfigOrDie "Cfg.LoadPlugin(/epics/base-7.0.3.1/require/3.1.2/siteMods/ecmcPlugin_RasPi/master/lib/linux-arm/libecmcPlugin_RasPi.so)"
-Ecmc plugin, ecmcRasPi, for RasPi GPIO support initiating...
+## Load plugin:
+epicsEnvSet(ECMC_PLUGIN_FILNAME,"/epics/base-7.0.3.1/require/3.1.2/siteMods/ecmcPlugin_RasPi/master/lib/linux-arm/libecmcPlugin_RasPi.so")
+epicsEnvSet(ECMC_PLUGIN_CONFIG,"DBG_PRINT=1")  # Enable printouts from plugin
+iocshLoad /epics/base-7.0.3.1/require/3.1.2/siteMods/ecmccfg/plugins/loadPlugin.cmd, "PLUGIN_ID=0,FILE=/epics/base-7.0.3.1/require/3.1.2/siteMods/ecmcPlugin_RasPi/master/lib/linux-arm/libecmcPlugin_RasPi.so,CONFIG='DBG_PRINT=1', REPORT=1"
+#==============================================================================
+# pluginLoad.cmd
+ecmcConfigOrDie "Cfg.LoadPlugin(0,/epics/base-7.0.3.1/require/3.1.2/siteMods/ecmcPlugin_RasPi/master/lib/linux-arm/libecmcPlugin_RasPi.so,DBG_PRINT=1)"
+../ecmcPlugin_RasPiApp/src/ecmcPluginRasPi.c/rpi_Construct:67: ConfigStr="DBG_PRINT=1"
+Ecmc plugin, ecmcRasPi, for RasPi GPIO support loading...
 Note: Defaults to WiringPi pin numbering if not another setup function is called.
+2020/03/29 12:19:56.366 OK
+ecmcEpicsEnvSetCalcTenary("ECMC_PLUGIN_REPORT", "1>0","","#")
+ecmcConfigOrDie "Cfg.ReportPlugin(0)"
 Plugin info: 
+  Index                = 0
   Name                 = ecmcRasPi
   Description          = ecmc plugin for GPIO access on RasPi (wrapper to WiringPi)
+  Option description   = DBG_PRINT=1/0 : Enables/disables printouts from plugin.
+  Filename             = /epics/base-7.0.3.1/require/3.1.2/siteMods/ecmcPlugin_RasPi/master/lib/linux-arm/libecmcPlugin_RasPi.so
+  Config string        = DBG_PRINT=1
   Version              = 1
   Interface version    = 512 (ecmc = 512)
-      max plc funcs    = 64
-      max plc consts   = 64
-  Construct func       = @0xb5bcd108
-  Enter realtime func  = @0xb5bcd160
-  Exit realtime func   = @0xb5bcd144
-  Realtime func        = @0xb5bcd100
-  Destruct func        = @0xb5bcd134
-  dlhandle             = @0xa33ef8
+     max plc funcs     = 64
+     max plc func args = 10
+     max plc consts    = 64
+  Construct func       = @0xb5014224
+  Enter realtime func  = @0xb5014370
+  Exit realtime func   = @0xb5014f3c
+  Realtime func        = @0xb50141c0
+  Destruct func        = @0xb5014308
+  dlhandle             = @0x1f00f18
   Plc functions:
     funcs[00]:
       Name       = "rpi_digitalWrite(arg0, arg1);"
       Desc       = WiringPi: void digitalWrite(pin,level)
       Arg count  = 2
-      func       = @0xb5bcd230
+      func       = @0xb50145ac
     funcs[01]:
       Name       = "rpi_digitalRead(arg0);"
       Desc       = WiringPi: level=digitalRead(pin)
       Arg count  = 1
-      func       = @0xb5bcd294
+      func       = @0xb501465c
     funcs[02]:
       Name       = "rpi_pinMode(arg0, arg1);"
       Desc       = WiringPi: void pinMode(pin,mode)
       Arg count  = 2
-      func       = @0xb5bcd2e4
+      func       = @0xb50146f8
     funcs[03]:
       Name       = "rpi_pullUpDnControl(arg0, arg1);"
       Desc       = WiringPi: void pullUpDnControl(pin,pud)
       Arg count  = 2
-      func       = @0xb5bcd344
+      func       = @0xb50147a4
     funcs[04]:
       Name       = "rpi_pwmWrite(arg0, arg1);"
       Desc       = WiringPi: void pwmWrite(pin,value)
       Arg count  = 2
-      func       = @0xb5bcd3a4
+      func       = @0xb5014854
     funcs[05]:
       Name       = "rpi_analogRead(arg0);"
       Desc       = WiringPi: value=analogRead(pin)
       Arg count  = 1
-      func       = @0xb5bcd404
+      func       = @0xb5014904
     funcs[06]:
       Name       = "rpi_analogWrite(arg0, arg1);"
       Desc       = WiringPi: void analogWrite(pin,value)
       Arg count  = 2
-      func       = @0xb5bcd454
+      func       = @0xb50149a0
     funcs[07]:
       Name       = "rpi_digitalWriteByte(arg0);"
       Desc       = WiringPi: void digitalWriteByte(value)
       Arg count  = 1
-      func       = @0xb5bcd4b4
+      func       = @0xb5014a4c
     funcs[08]:
       Name       = "rpi_pwmSetMode(arg0);"
       Desc       = WiringPi: void pwmSetMode(mode)
       Arg count  = 1
-      func       = @0xb5bcd50c
+      func       = @0xb5014aec
     funcs[09]:
       Name       = "rpi_pwmSetRange(arg0);"
       Desc       = WiringPi: void pwmSetRange(range)
       Arg count  = 1
-      func       = @0xb5bcd564
+      func       = @0xb5014b8c
     funcs[10]:
       Name       = "rpi_pwmSetClock(arg0);"
       Desc       = WiringPi: void pwmSetClock(divisor)
       Arg count  = 1
-      func       = @0xb5bcd5bc
+      func       = @0xb5014c2c
     funcs[11]:
       Name       = "rpi_piBoardRev();"
       Desc       = WiringPi: int piBoardRev()
       Arg count  = 0
-      func       = @0xb5bcd614
+      func       = @0xb5014ccc
     funcs[12]:
       Name       = "rpi_wpiPinToGpio(arg0);"
       Desc       = WiringPi: int wpiPinToGpio(wPiPin)
       Arg count  = 1
-      func       = @0xb5bcd650
+      func       = @0xb5014d54
     funcs[13]:
       Name       = "rpi_physPinToGpio(arg0);"
       Desc       = WiringPi: int physPinToGpio(physPin)
       Arg count  = 1
-      func       = @0xb5bcd6a0
+      func       = @0xb5014df0
     funcs[14]:
       Name       = "rpi_setPadDrive(arg0, arg1);"
       Desc       = WiringPi: int setPadDrive(group, value)
       Arg count  = 2
-      func       = @0xb5bcd6f0
+      func       = @0xb5014e8c
     funcs[15]:
       Name       = "rpi_wiringPiSetup();"
       Desc       = WiringPi: int wiringPiSetup()
       Arg count  = 0
-      func       = @0xb5bcd190
+      func       = @0xb50143dc
     funcs[16]:
       Name       = "rpi_wiringPiSetupGpio();"
       Desc       = WiringPi: int wiringPiSetupGpio()
       Arg count  = 0
-      func       = @0xb5bcd1b8
+      func       = @0xb5014450
     funcs[17]:
       Name       = "rpi_wiringPiSetupPhys();"
       Desc       = WiringPi: int wiringPiSetupPhys()
       Arg count  = 0
-      func       = @0xb5bcd1e0
+      func       = @0xb50144c4
     funcs[18]:
       Name       = "rpi_wiringPiSetupSys();"
       Desc       = WiringPi: int wiringPiSetupSys()
       Arg count  = 0
-      func       = @0xb5bcd208
+      func       = @0xb5014538
   Plc constants:
     consts[00]:
       Name     = "rpi_LOW" = 0.000
@@ -309,6 +324,9 @@ Plugin info:
     consts[18]:
       Name     = "rpi_WPI_MODE_PIFACE" = 4.000
       Desc     = WiringPi: Mode WPI_MODE_PIFACE (=4)
+
+2020/03/29 12:19:56.368 OK
+
 ```
 
 # Plugin interface description
