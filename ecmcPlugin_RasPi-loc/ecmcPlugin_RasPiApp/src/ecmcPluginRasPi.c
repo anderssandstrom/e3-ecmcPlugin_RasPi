@@ -21,6 +21,8 @@ extern "C" {
 #endif  // ifdef __cplusplus
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include <wiringPi.h>
 #include "ecmcPluginDefs.h"
 #include "ecmcRasPiGPIO.h"
@@ -31,6 +33,7 @@ static int    ecmcLastError     = 0;
 static void*  ecmcAsynPort      = NULL;
 static char*  confStr           = NULL;
 static int    wiringPiSetupDone = 0;
+static int    dbgModeOption     = 0;
 
 #define EXE_SETUP_IF_NOT_DONE()              \
   {                                          \
