@@ -14,25 +14,16 @@
 // Needed to get headers in ecmc right...
 #define ECMC_IS_PLUGIN
 
-#include "ecmcPluginDataRefs.h"
 #include "ecmcRasPiGPIO.h"
+#include "ecmcPluginClient.h"
 
-// read rt sample time 
-double getSampleRate(void* ecmcRefs) {
-  if(ecmcRefs) {
-    ecmcPluginDataRefs* dataFromEcmc = (ecmcPluginDataRefs*)ecmcRefs;
-    // call report()!    
-    return dataFromEcmc->sampleTimeMS;
-  }
-  return -1;
+// Use ecmcPluginClient.h interface
+double getSampleRate() {
+    
+  return getEcmcSampleRate();
 }
 
-// Demo simple use of asynPort. Most ecmc data can be accessed from asynPort 
-void* getAsynPort(void* ecmcRefs) {
-    
-  if(ecmcRefs) {
-    ecmcPluginDataRefs* dataFromEcmc = (ecmcPluginDataRefs*)ecmcRefs;    
-    return dataFromEcmc->ecmcAsynPort;
-  }
-  return NULL;
+// Use ecmcPluginClient.h interface
+void* getAsynPort() {
+  return getEcmcAsynPortDriver();
 }

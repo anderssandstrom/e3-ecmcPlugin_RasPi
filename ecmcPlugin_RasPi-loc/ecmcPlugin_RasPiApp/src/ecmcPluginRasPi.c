@@ -28,7 +28,6 @@ extern "C" {
 #include "ecmcRasPiGPIO.h"
 
 static double ecmcSampleRate    = -1;
-static void*  ecmcDataRefs      = 0;    //ecmcRefs form raspiEnterRT()
 static int    ecmcLastError     = 0;
 static void*  ecmcAsynPort      = NULL;
 static char*  confStr           = NULL;
@@ -68,6 +67,10 @@ int rpi_Construct(char * configStr)
   PRINT_IF_DBG_MODE("Ecmc plugin, "ECMC_PLUGIN_NAME", for RasPi GPIO support loading...\n");
   PRINT_IF_DBG_MODE("Note: Defaults to WiringPi pin numbering if not another setup function is called.\n");
 
+  ecmcSampleRate = getSampleRate();
+  PRINT_IF_DBG_MODE("%s/%s:%d Ecmc sample rate is: %lf ms\n",__FILE__, __FUNCTION__, __LINE__,ecmcSampleRate);
+  ecmcAsynPort   = getAsynPort();    
+
   return 0;
 }
 
@@ -98,12 +101,8 @@ int rpi_Realtime(int ecmcError)
  *  Return value other than 0 will be considered error.
  *  ecmcRefs is only valid after "raspiEnterRT()"
  **/
-int rpi_EnterRT(void* ecmcRefs){
+int rpi_EnterRT(void){
   PRINT_IF_DBG_MODE("%s/%s:%d...\n",__FILE__, __FUNCTION__, __LINE__);
-  // Save ecmcRefs if needed
-  ecmcDataRefs   = ecmcRefs;
-  ecmcSampleRate = getSampleRate(ecmcRefs);
-  ecmcAsynPort   = getAsynPort(ecmcRefs);    
   return 0;
 }
 
