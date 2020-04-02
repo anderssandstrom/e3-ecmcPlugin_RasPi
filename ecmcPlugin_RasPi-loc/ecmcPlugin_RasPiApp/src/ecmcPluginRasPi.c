@@ -257,6 +257,8 @@ double rpi_setPadDrive(double group, double value) {
 
 // Compile data for lib so ecmc now what to use
 struct ecmcPluginData pluginDataDef = {
+  // Allways use ECMC_PLUG_VERSION_MAGIC
+  .ifVersion = ECMC_PLUG_VERSION_MAGIC, 
   // Name 
   .name = ECMC_PLUGIN_NAME,
   // Description 
@@ -265,8 +267,6 @@ struct ecmcPluginData pluginDataDef = {
   .optionDesc = ECMC_PLUGIN_DBG_OPTION_CMD"=1/0 : Enables/disables printouts from plugin.",
   // Plugin version
   .version = ECMC_PLUGIN_VERSION,
-  // Allways use ECMC_PLUG_VERSION_MAGIC
-  .ifVersion = ECMC_PLUG_VERSION_MAGIC, 
   // Optional construct func, called once at load. NULL if not definded.
   .constructFnc = rpi_Construct,
   // Optional destruct func, called once at unload. NULL if not definded.
