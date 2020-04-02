@@ -25,7 +25,8 @@ extern "C" {
 #include <stdlib.h>
 #include <wiringPi.h>
 #include "ecmcPluginDefs.h"
-#include "ecmcRasPiGPIO.h"
+#include "ecmcPluginClient.h"  //Plugin utils
+#include "ecmcPLC.h"
 
 static double ecmcSampleRate    = -1;
 static int    ecmcLastError     = 0;
@@ -50,27 +51,32 @@ static int    dbgModeOption     = 0;
   }                                          \
 
 /** Optional. 
- *  Will be called once just before ecmc goes into realtime mode.
+ *  Will be called once at plugin load.
  *  Return value other than 0 will be considered error.
  *  configStr can be used for configuration parameters.
  **/
 int rpi_Construct(char * configStr)
 {
+  /** 
+   * Parse config string (only one option defined "DBG_PRINT=" 
+   * (no need for loop)) 
+   */
   confStr = strdup(configStr);
-  //Only one option defined "DBG_PRINT=" (no need for loop)
   int tempValue=0;
   int nvals = sscanf(confStr, ECMC_PLUGIN_DBG_OPTION_CMD"=%d",&tempValue);
   if (nvals == 1) {
     dbgModeOption = tempValue;
   }
-  PRINT_IF_DBG_MODE("%s/%s:%d: ConfigStr=\"%s\"\n",__FILE__, __FUNCTION__, __LINE__,configStr);  
   PRINT_IF_DBG_MODE("Ecmc plugin, "ECMC_PLUGIN_NAME", for RasPi GPIO support loading...\n");
   PRINT_IF_DBG_MODE("Note: Defaults to WiringPi pin numbering if not another setup function is called.\n");
-
-  ecmcSampleRate = getSampleRate();
+  PRINT_IF_DBG_MODE("%s/%s:%d: ConfigStr=\"%s\"\n",__FILE__, __FUNCTION__, __LINE__,configStr);  
+  
+  // Not used. Just example..
+  ecmcSampleRate = getEcmcSampleRate();     
   PRINT_IF_DBG_MODE("%s/%s:%d Ecmc sample rate is: %lf ms\n",__FILE__, __FUNCTION__, __LINE__,ecmcSampleRate);
-  ecmcAsynPort   = getAsynPort();    
 
+  // Not used. Just example..
+  ecmcAsynPort   = getEcmcAsynPortDriver();
   return 0;
 }
 

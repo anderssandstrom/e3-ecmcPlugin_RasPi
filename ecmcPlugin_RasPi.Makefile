@@ -53,7 +53,6 @@ USR_LDFLAGS += -lwiringPi
 
 TEMPLATES += $(wildcard $(APPDB)/*.db)
 SOURCES += $(APPSRC)/ecmcPluginRasPi.c
-SOURCES += $(APPSRC)/ecmcRasPiGPIO.cpp
 
 db:
 
