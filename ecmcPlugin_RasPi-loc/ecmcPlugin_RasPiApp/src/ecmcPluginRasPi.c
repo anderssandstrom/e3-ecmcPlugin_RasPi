@@ -15,6 +15,11 @@
 #define ECMC_PLUGIN_VERSION 1
 #define ECMC_PLUGIN_NAME "ecmcRasPi"
 #define ECMC_PLUGIN_DBG_OPTION_CMD "DBG_PRINT"
+// only allow to load once
+#define ECMC_PLUGIN_ALLOW_MULTI_LOAD 0
+
+// Error codes
+#define ECMC_PLUGIN_ERROR_ALREADY_LOADED 1
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,6 +39,7 @@ static void*  ecmcAsynPort      = NULL;
 static char*  confStr           = NULL;
 static int    wiringPiSetupDone = 0;
 static int    dbgModeOption     = 0;
+static int    loaded            = 0;
 
 #define EXE_SETUP_IF_NOT_DONE()              \
   {                                          \
@@ -57,6 +63,12 @@ static int    dbgModeOption     = 0;
  **/
 int rpi_Construct(char * configStr)
 {
+  // Ensure that plugin is only loaded once
+  if(loaded) {
+    printf("%s/%s:%d: Error: Module already loaded (0x%x).\n",__FILE__, __FUNCTION__,
+           __LINE__,ECMC_PLUGIN_ERROR_ALREADY_LOADED);
+    return ECMC_PLUGIN_ERROR_ALREADY_LOADED;
+  }
   /** 
    * Parse config string (only one option defined "DBG_PRINT=" 
    * (no need for loop)) 
@@ -77,6 +89,9 @@ int rpi_Construct(char * configStr)
 
   // Not used. Just example..
   ecmcAsynPort   = getEcmcAsynPortDriver();
+
+  // Prevent loading more than once
+  loaded = 1;
   return 0;
 }
 
