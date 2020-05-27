@@ -64,7 +64,7 @@ static int    loaded            = 0;
 int rpi_Construct(char * configStr)
 {
   // Ensure that plugin is only loaded once
-  if(loaded) {
+  if(loaded && !ECMC_PLUGIN_ALLOW_MULTI_LOAD) {
     printf("%s/%s:%d: Error: Module already loaded (0x%x).\n",__FILE__, __FUNCTION__,
            __LINE__,ECMC_PLUGIN_ERROR_ALREADY_LOADED);
     return ECMC_PLUGIN_ERROR_ALREADY_LOADED;
@@ -312,6 +312,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[1] =
       { /*----rpi_digitalRead----*/
@@ -331,6 +332,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[2] =
       { /*----rpi_pinMode----*/
@@ -350,6 +352,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[3] =
       { /*----rpi_pullUpDnControl----*/
@@ -369,6 +372,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[4] =
       { /*----rpi_pwmWrite----*/
@@ -388,6 +392,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[5] =
       { /*----rpi_analogRead----*/
@@ -407,6 +412,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[6] =
       { /*----rpi_analogWrite----*/
@@ -426,6 +432,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[7] =
       { /*----rpi_digitalWriteByte----*/
@@ -445,6 +452,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[8] =
       { /*----rpi_pwmSetMode----*/
@@ -464,6 +472,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
 
   .funcs[9] =
@@ -484,6 +493,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[10] =
       { /*----rpi_pwmSetClock----*/
@@ -503,6 +513,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[11] =
       { /*----rpi_piBoardRev----*/
@@ -522,6 +533,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[12] =
       { /*----rpi_wpiPinToGpio----*/
@@ -541,6 +553,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[13] =
       { /*----rpi_physPinToGpio----*/
@@ -560,6 +573,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[14] =
       { /*----rpi_setPadDrive----*/
@@ -579,6 +593,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[15] =
       { /*----rpi_wiringPiSetup----*/
@@ -598,6 +613,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[16] =
       { /*----rpi_wiringPiSetupGpio----*/
@@ -617,6 +633,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[17] =
       { /*----rpi_wiringPiSetupPhys----*/
@@ -636,6 +653,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[18] =
       { /*----rpi_wiringPiSetupSys----*/
@@ -655,6 +673,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg8  = NULL,
         .funcArg9  = NULL,
         .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
   .funcs[19] = {0}, //last element set all to zero..
 
