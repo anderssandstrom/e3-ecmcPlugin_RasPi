@@ -1,4 +1,4 @@
-e3-ecmcPlugin_RasPi
+e3-ecmc_plugin_raspi
 ======
 WiringPi, http://wiringpi.com, RasPi GPIO support for ecmc (https://github.com/icshwi/ecmc).
 
@@ -10,7 +10,7 @@ This module is basically a wrapper to some parts of WiringPi (functions and cons
 ## ecmc plugins
 See this repo for some more doc on how to implement a ecmc plugin: 
 
-https://github.com/anderssandstrom/e3-ecmcPlugin_Advanced
+https://github.com/anderssandstrom/e3-ecmc_plugin_advanced
 
 ## ecmc plc functions
 
@@ -137,16 +137,16 @@ https://github.com/WiringPi/WiringPi
 Not sure how to handle this. Since wiringPi is installed in the raspian dist I guess there will be solution.
 
 
-## ecmc plugin info output (for ecmcPlugin_RasPi)
+## ecmc plugin info output (for ecmc_plugin_raspi)
 ```
 ## Load plugin:
-epicsEnvSet(ECMC_PLUGIN_FILNAME,"/epics/base-7.0.3.1/require/3.1.2/siteMods/ecmcPlugin_RasPi/master/lib/linux-arm/libecmcPlugin_RasPi.so")
+epicsEnvSet(ECMC_PLUGIN_FILNAME,"/epics/base-7.0.3.1/require/3.1.2/siteMods/ecmc_plugin_raspi/master/lib/linux-arm/libecmc_plugin_raspi.so")
 epicsEnvSet(ECMC_PLUGIN_CONFIG,"DBG_PRINT=1")  # Enable printouts from plugin
-iocshLoad /epics/base-7.0.3.1/require/3.1.2/siteMods/ecmccfg/plugins/loadPlugin.cmd, "PLUGIN_ID=0,FILE=/epics/base-7.0.3.1/require/3.1.2/siteMods/ecmcPlugin_RasPi/master/lib/linux-arm/libecmcPlugin_RasPi.so,CONFIG='DBG_PRINT=1', REPORT=1"
+iocshLoad /epics/base-7.0.3.1/require/3.1.2/siteMods/ecmccfg/plugins/loadPlugin.cmd, "PLUGIN_ID=0,FILE=/epics/base-7.0.3.1/require/3.1.2/siteMods/ecmc_plugin_raspi/master/lib/linux-arm/libecmc_plugin_raspi.so,CONFIG='DBG_PRINT=1', REPORT=1"
 #==============================================================================
 # pluginLoad.cmd
-ecmcConfigOrDie "Cfg.LoadPlugin(0,/epics/base-7.0.3.1/require/3.1.2/siteMods/ecmcPlugin_RasPi/master/lib/linux-arm/libecmcPlugin_RasPi.so,DBG_PRINT=1)"
-../ecmcPlugin_RasPiApp/src/ecmcPluginRasPi.c/rpi_Construct:67: ConfigStr="DBG_PRINT=1"
+ecmcConfigOrDie "Cfg.LoadPlugin(0,/epics/base-7.0.3.1/require/3.1.2/siteMods/ecmc_plugin_raspi/master/lib/linux-arm/libecmc_plugin_raspi.so,DBG_PRINT=1)"
+../ecmc_plugin_raspiApp/src/ecmcPluginRasPi.c/rpi_Construct:67: ConfigStr="DBG_PRINT=1"
 Ecmc plugin, ecmcRasPi, for RasPi GPIO support loading...
 Note: Defaults to WiringPi pin numbering if not another setup function is called.
 2020/03/29 12:19:56.366 OK
@@ -157,7 +157,7 @@ Plugin info:
   Name                 = ecmcRasPi
   Description          = ecmc plugin for GPIO access on RasPi (wrapper to WiringPi)
   Option description   = DBG_PRINT=1/0 : Enables/disables printouts from plugin.
-  Filename             = /epics/base-7.0.3.1/require/3.1.2/siteMods/ecmcPlugin_RasPi/master/lib/linux-arm/libecmcPlugin_RasPi.so
+  Filename             = /epics/base-7.0.3.1/require/3.1.2/siteMods/ecmc_plugin_raspi/master/lib/linux-arm/libecmc_plugin_raspi.so
   Config string        = DBG_PRINT=1
   Version              = 1
   Interface version    = 512 (ecmc = 512)

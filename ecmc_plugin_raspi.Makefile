@@ -37,7 +37,7 @@ ifneq ($(strip $(ECMC_DEP_VERSION)),)
 ecmc_VERSION=$(ECMC_DEP_VERSION)
 endif
 
-APP:=ecmcPlugin_RasPiApp
+APP:=ecmc_plugin_raspiApp
 APPDB:=$(APP)/Db
 APPSRC:=$(APP)/src
 
